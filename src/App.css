@@ -1,0 +1,89 @@
+.navbar-light .navbar-brand {
+    color: #d9372f;
+}
+
+.navigation-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #cccccc;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.navigation-bar .navigation-buttons {
+    flex-basis: 30%;
+    background-color: #cccccc;
+}
+
+.MuiBottomNavigation-root {
+    background-color: #cccccc !important;
+}
+
+.input-text {
+    width: 80%;
+    margin-top: 16px;
+}
+
+.input-text .MuiFormControl-root {
+    width: 80%;
+}
+
+.leaderboard-cards {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    min-width: 350px;
+}
+
+.leaderboard-cards>div {
+    width: 345px;
+    height: 390px;
+}
+
+.avatar-text {
+    display: flex;
+    align-items: center;
+}
+
+.avatar-text>div {
+    border: 1px solid #ccc;
+    margin-right: 16px;
+}
+
+.answer-card {
+    width: 400px;
+}
+
+.answer-card-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 32px;
+}
+
+.card-selected {
+    border: 1px solid black !important;
+}
+
+main {
+    margin: 20px 5%;
+}
+
+.tab-panel {
+    margin-top: 32px;
+}
+
+.save-button {
+    margin-top: 16px !important;
+}
+
+ul li {
+    margin-bottom: 8px;
+}
+
+ul li a {
+    color: black;
+    font-size: 1.2rem;
+}
