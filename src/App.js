@@ -94,7 +94,7 @@ export class App extends Component {
               <DetailQuestion match={match} userDictionary={userDictionary} />
             )}
             />
-            <Route exact path="/new" render={() => (
+            <Route exact path="/add" render={() => (
               <NewQuestion />
             )}
             />

@@ -81,7 +81,7 @@ export default function Navbar(props) {
                         to="/" />
                     <BottomNavigationAction label="New Question" icon={<AddBoxIcon />}
                         component={Link}
-                        to="/new" />
+                        to="/add" />
                     <BottomNavigationAction label="Leaders" icon={<AssignmentIcon />}
                         component={Link}
                         to="/leaderboard" />
