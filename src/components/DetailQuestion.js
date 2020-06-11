@@ -145,11 +145,6 @@ export class DetailQuestion extends Component {
         {isAuthenticated && !question && (
           <Redirect to="/404" />
         )}
-
-        {!isAuthenticated && (
-          <h2>You need to select a user to view the list of questions.</h2>
-        )}
-
       </div>
     )
   }
