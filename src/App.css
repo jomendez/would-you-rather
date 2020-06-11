@@ -64,7 +64,7 @@
 }
 
 .card-selected {
-    border: 1px solid black !important;
+    border: 2px solid black !important;
 }
 
 main {

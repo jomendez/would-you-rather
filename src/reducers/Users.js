@@ -26,7 +26,7 @@ export function users(state = initStateUsers, action) {
             ...state.users[action.authedUser],
             answers: {
               ...state.users[action.authedUser].answers,
-              [action.qid]: action.answer
+              [action.id]: action.answer
             }
           }
         }

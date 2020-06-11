@@ -1,55 +1,76 @@
-import { Avatar, Card, CardActionArea, CardActions, CardContent, Typography } from '@material-ui/core';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
-import { bindActionCreators } from 'redux';
-import { fetchQuestions, updateAnswer } from '../actions/Questions';
-import '../App.css';
-import { getPercentVoted } from '../util/util';
+import { Avatar, Card, CardActionArea, CardActions, CardContent, Typography } from '@material-ui/core'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
+import { bindActionCreators } from 'redux'
+import { fetchQuestions, updateAnswer } from '../actions/Questions'
+import '../App.css'
+import { getPercentVoted } from '../util/util'
 
 export class DetailQuestion extends Component {
   constructor(props) {
-    super(props);
-    this.onOptionSelected = this.onOptionSelected.bind(this);
+    super(props)
+    this.onOptionSelected = this.onOptionSelected.bind(this)
   }
-  questionAnswered = false;
-  optionSelected = '';
+  questionAnswered = false
+  selectOptionOne = false
+  selectOptionTwo = false
+
+  state = {
+    optionSelected: '',
+  }
 
   componentDidMount() {
-    this.props.fetchQuestions();
+    this.props.fetchQuestions()
   }
 
   onOptionSelected(uid, questionId, answer) {
-    if (this.questionAnswered) {
-      return
-    }
-    this.optionSelected = answer
-    this.props.updateAnswer(uid, questionId, answer);
+    this.setState({ optionSelected: answer })
+    this.props.fetchQuestions().then(() => {
+      if (this.questionAnswered) {
+        return
+      }
+      this.props.updateAnswer(uid, questionId, answer)
+    })
   }
 
   render() {
-    const { login, questions, match, userDictionary } = this.props;
-    const questionId = match.params.question_id;
-    const totalUsers = Object.keys(userDictionary).length;
+    const { login, questions, match, userDictionary } = this.props
+    const questionId = match.params.question_id
+    const totalUsers = Object.keys(userDictionary).length
 
-    const isAuthenticated = (login && login.isAuthenticated) && login.isAuthenticated;
-    const authenticatedUserId = (login && login.isAuthenticated) && login.authenticatedUserId;
-    const question = (questions && questions.questions) && questions.questions[questionId];
-    const optionOneVotes = question && question.optionOne.votes.length;
-    const optionOneText = question && question.optionOne.text;
-    const optionOneVotePercent = question && getPercentVoted(optionOneVotes, totalUsers);
-    const optionTwoText = question && question.optionTwo.text;
-    const optionTwoVotes = question && question.optionTwo.votes.length;
-    const optionTwoVotePercent = question && getPercentVoted(optionTwoVotes, totalUsers);
-    const authorId = question && question.author
-    const avatarUrl = (question && (userDictionary[authorId])) && userDictionary[authorId].avatarURL
+    const isAuthenticated = (login && login.isAuthenticated) && login.isAuthenticated
+    const authenticatedUserId = (login && login.isAuthenticated) && login.authenticatedUserId
+    const question = (questions && questions.questions) && questions.questions[questionId]
+    
+    if(!question){
+      return (<div></div>)
+    }
 
-
+    const optionOneVotes = question.optionOne.votes.length
+    const optionOneText = question.optionOne.text
+    const optionOneVotePercent = getPercentVoted(optionOneVotes, totalUsers)
+    const optionTwoText = question.optionTwo.text
+    const optionTwoVotes = question.optionTwo.votes.length
+    const optionTwoVotePercent = getPercentVoted(optionTwoVotes, totalUsers)
+    const authorId = question.author
+    const avatarUrl = (userDictionary[authorId]) && userDictionary[authorId].avatarURL
 
     if (isAuthenticated && question) {
-      const userAnsweredQuestions = Object.keys(userDictionary[authenticatedUserId]['answers']);
+      const userAnsweredQuestions = Object.keys(userDictionary[authenticatedUserId]['answers'])
+
+      const answeredQuestionsId = userDictionary[authenticatedUserId]['answers']
+      if (answeredQuestionsId[questionId]) {
+        this.selectOptionOne = answeredQuestionsId[questionId] === "optionOne"
+        this.selectOptionTwo = answeredQuestionsId[questionId] === "optionTwo"
+      }
+
       if (userAnsweredQuestions.indexOf(questionId) > -1) {
-        this.questionAnswered = true;
+        this.questionAnswered = true
+      }else{
+        this.questionAnswered = false
+        this.selectOptionOne = false
+        this.selectOptionTwo = false
       }
     }
 
@@ -72,7 +93,7 @@ export class DetailQuestion extends Component {
 
               <div className="answer-card" >
                 <Card onClick={(event) => this.onOptionSelected(authenticatedUserId, questionId, 'optionOne')}
-                  className={(this.optionSelected === 'optionOne') ? 'card-selected' : ''}>
+                  className={(this.state.optionSelected === 'optionOne' || this.selectOptionOne) ? 'card-selected' : ''}>
                   <CardActionArea>
                     <CardContent>
                       <Typography gutterBottom variant="h5" component="h2">
@@ -94,28 +115,29 @@ export class DetailQuestion extends Component {
                 </Card>
               </div>
 
-
-              <Card className="answer-card" onClick={(event) => this.onOptionSelected(authenticatedUserId, questionId, 'optionTwo')}>
-                <CardActionArea>
-                  <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      2:
+              <div className="answer-card" >
+                <Card onClick={(event) => this.onOptionSelected(authenticatedUserId, questionId, 'optionTwo')}
+                  className={(this.state.optionSelected === 'optionTwo' || this.selectOptionTwo) ? 'card-selected' : ''}>
+                  <CardActionArea>
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        2:
                     </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p">
-                      {optionTwoText}
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
-                <CardActions>
-                  {this.questionAnswered && (
-                    <div>
-                      <div className="">{optionTwoVotes} votes</div>
-                      <div className="">{optionTwoVotePercent} % voted</div>
-                    </div>
-                  )}
-                </CardActions>
-              </Card>
-
+                      <Typography variant="body2" color="textSecondary" component="p">
+                        {optionTwoText}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                  <CardActions>
+                    {this.questionAnswered && (
+                      <div>
+                        <div className="">{optionTwoVotes} votes</div>
+                        <div className="">{optionTwoVotePercent} % voted</div>
+                      </div>
+                    )}
+                  </CardActions>
+                </Card>
+              </div>
             </div>
           </div>
         )}
@@ -141,7 +163,7 @@ function mapStateToProps({ login, questions }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ fetchQuestions, updateAnswer }, dispatch);
+  return bindActionCreators({ fetchQuestions, updateAnswer }, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DetailQuestion);
+export default connect(mapStateToProps, mapDispatchToProps)(DetailQuestion)

@@ -38,21 +38,21 @@ export function requestAnswerUpdate() {
   }
 }
 
-export function receiveAnswerUpdate(authedUser, qid, answer) {
+export function receiveAnswerUpdate(authedUser, id, answer) {
   return {
     type: RESPONSE_ANSWER_UPDATE,
     isRetrieving: false,
     authedUser,
-    qid,
+    id,
     answer
   }
 }
 
-export const updateAnswer = (authedUser, qid, answer) => dispatch => {
+export const updateAnswer = (authedUser, id, answer) => dispatch => {
   dispatch(requestAnswerUpdate());
-  let paramsObj = { authedUser, qid, answer };
+  let paramsObj = { authedUser, id, answer };
   _saveQuestionAnswer(paramsObj);
-  dispatch(receiveAnswerUpdate(authedUser, qid, answer));
+  dispatch(receiveAnswerUpdate(authedUser, id, answer));
 }
 
 

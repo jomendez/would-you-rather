@@ -27,11 +27,11 @@ export function questions(state = initStateQuestions, action) {
         ...state,
         isRetrieving: action.isRetrieving,
         questions: {...state.questions,
-          [action.qid]: {
-            ...state.questions[action.qid],
+          [action.id]: {
+            ...state.questions[action.id],
             [action.answer]: {
-              ...state.questions[action.qid][action.answer],
-              votes: state.questions[action.qid][action.answer].votes.concat([action.authedUser])
+              ...state.questions[action.id][action.answer],
+              votes: state.questions[action.id][action.answer].votes.concat([action.authedUser])
           }
         }
         },
