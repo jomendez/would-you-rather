@@ -46,7 +46,9 @@ export class DetailQuestion extends Component {
     const question = (questions && questions.questions) && questions.questions[questionId]
 
     if (!question) {
-      return (<div></div>)
+      return (<div>
+         <Redirect to="/404" />
+      </div>)
     }
 
     const optionOneVotes = question.optionOne.votes.length

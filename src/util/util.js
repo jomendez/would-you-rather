@@ -36,8 +36,8 @@ export function sortByPropDesc(arr, prop) {
 
 export function sortByAnswersCount(answerArray) {
   answerArray.sort((a, b) => {
-    let bNumAnswers = Object.keys(b.answers).length;
-    let aNumAnswers = Object.keys(a.answers).length;
+    let bNumAnswers = Object.keys(b.answers).length + b.questions.length;
+    let aNumAnswers = Object.keys(a.answers).length + a.questions.length;
     return bNumAnswers - aNumAnswers;
   });
   return answerArray;
