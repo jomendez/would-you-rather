@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { receiveLogin, receiveLogout } from './actions/Login';
 import { fetchQuestions } from './actions/Questions';
@@ -12,6 +12,8 @@ import Questions from './components/ListQuestions';
 import Navbar from './components/Navbar';
 import NewQuestion from './components/NewQuestion';
 import NotFound from './components/NotFound';
+import Login from './components/Login';
+import NoMatch from './components/NoMatch';
 
 
 export class App extends Component {
@@ -67,7 +69,7 @@ export class App extends Component {
       isAuthenticated = this.props.login['isAuthenticated'];
       if (isAuthenticated) {
         let loggedInUid = this.state.authenticatedUser;
-      
+
         if (this.props.questions && this.props.questions.questions) {
           questionDictionary = this.props.questions.questions;
           userAnswers = userDictionary[loggedInUid]['answers'];
@@ -82,30 +84,38 @@ export class App extends Component {
           <Navbar {...this.props} logout={this.logout} authenticatedUser={this.state.authenticatedUser} onChangeHandler={this.onChangeHandler} />
 
           <main>
-            <Route exact path="/" render={() => (
-              <Questions isAuthenticated={isAuthenticated}
-                userQuestions={userQuestions}
-                userAnswers={userAnswers}
-                questions={questionDictionary}
+
+            <Switch>
+              {!this.state.authenticatedUser ? <Route component={Login} /> : null}
+
+
+              <Route exact path="/" render={() => (
+                <Questions isAuthenticated={isAuthenticated}
+                  userQuestions={userQuestions}
+                  userAnswers={userAnswers}
+                  questions={questionDictionary}
+                />
+              )}
               />
-            )}
-            />
-            <Route exact path="/questions/:question_id" render={({ match }) => (
-              <DetailQuestion match={match} userDictionary={userDictionary} />
-            )}
-            />
-            <Route exact path="/add" render={() => (
-              <NewQuestion />
-            )}
-            />
-            <Route exact path="/leaderboard" render={() => (
-              <LeaderBoard />
-            )}
-            />
-            <Route exact path="/404" render={() => (
-              <NotFound />
-            )}
-            />
+              <Route exact path="/questions/:question_id" render={({ match }) => (
+                <DetailQuestion match={match} userDictionary={userDictionary} />
+              )}
+              />
+              <Route exact path="/add" render={() => (
+                <NewQuestion />
+              )}
+              />
+              <Route exact path="/leaderboard" render={() => (
+                <LeaderBoard />
+              )}
+              />
+              <Route exact path="/404" render={() => (
+                <NotFound />
+              )}
+              />
+              <Route component={NoMatch} />
+
+            </Switch>
           </main>
         </div>
       </Router>

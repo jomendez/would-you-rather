@@ -34,6 +34,17 @@ export class NewQuestion extends Component {
 
     const optionOneText = this.state.optionOne;
     const optionTwoText = this.state.optionTwo;
+
+    if (!optionOneText || !optionTwoText) {
+      alert('The questions can not be empty')
+      return
+    }
+
+    if ((optionOneText && optionTwoText) && optionOneText.toLocaleLowerCase() === optionTwoText.toLocaleLowerCase()) {
+      alert('The questions can not be the same')
+      return
+    }
+
     const question = { optionOneText, optionTwoText, author }
     this.props.saveQuestion(question);
     form.reset();
@@ -73,10 +84,6 @@ export class NewQuestion extends Component {
               startIcon={<SaveIcon />}
             >Save</Button>
           </form>
-        )}
-
-        {!isAuthenticated && (
-          <h3>You need to select a user to add a question.</h3>
         )}
 
         {this.state.pollSubmitted && (

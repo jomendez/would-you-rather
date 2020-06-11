@@ -58,11 +58,6 @@ class Questions extends Component {
             </TabPanel>
           </div>
         )}
-
-        {!isAuthenticated && (
-          <h3>You need to log in to view the questions.</h3>
-        )}
-
       </div>
     )
   }
