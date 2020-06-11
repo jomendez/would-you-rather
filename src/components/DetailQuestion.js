@@ -25,7 +25,9 @@ export class DetailQuestion extends Component {
   }
 
   onOptionSelected(uid, questionId, answer) {
-    this.setState({ optionSelected: answer })
+    if (!this.questionAnswered) {
+      this.setState({ optionSelected: answer })
+    }
     this.props.fetchQuestions().then(() => {
       if (this.questionAnswered) {
         return
@@ -42,8 +44,8 @@ export class DetailQuestion extends Component {
     const isAuthenticated = (login && login.isAuthenticated) && login.isAuthenticated
     const authenticatedUserId = (login && login.isAuthenticated) && login.authenticatedUserId
     const question = (questions && questions.questions) && questions.questions[questionId]
-    
-    if(!question){
+
+    if (!question) {
       return (<div></div>)
     }
 
@@ -67,7 +69,7 @@ export class DetailQuestion extends Component {
 
       if (userAnsweredQuestions.indexOf(questionId) > -1) {
         this.questionAnswered = true
-      }else{
+      } else {
         this.questionAnswered = false
         this.selectOptionOne = false
         this.selectOptionTwo = false
